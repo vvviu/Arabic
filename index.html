@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>X-RAY Platform - اللغة العربية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0A84FF; --green: #30D158; --red: #FF453A;
+  --bg: #000000; --glass: rgba(28,28,30,0.80);
+  --glass-border: rgba(255,255,255,0.09); --glass-hover: rgba(10,132,255,0.30);
+  --text: #FFFFFF; --muted: rgba(255,255,255,0.40);
+  --shadow: 0 20px 60px rgba(0,0,0,0.55);
+}
+[data-theme="light"] {
+  --bg: #F2F2F7; --glass: rgba(255,255,255,0.78);
+  --glass-border: rgba(0,0,0,0.07); --glass-hover: rgba(10,132,255,0.25);
+  --text: #000000; --muted: rgba(0,0,0,0.38);
+  --shadow: 0 20px 60px rgba(0,0,0,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 50% at 50% -5%, rgba(10,132,255,0.28), transparent),
+    radial-gradient(ellipse 40% 30% at 85% 85%, rgba(48,209,88,0.07), transparent);
+  color:var(--text); font-family:'IBM Plex Sans Arabic',sans-serif;
+  min-height:100vh; display:flex; flex-direction:column; align-items:center;
+  padding:14px 14px 90px; transition:background .4s,color .4s;
+}
+.dynamic-island {
+  position:fixed; top:12px; left:50%; transform:translateX(-50%);
+  z-index:1000; display:flex; align-items:center; gap:8px;
+  background:#1c1c1e; border-radius:22px; padding:8px 18px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.6); cursor:pointer;
+  text-decoration:none; transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.1); -webkit-tap-highlight-color:transparent;
+}
+.dynamic-island:active{transform:translateX(-50%) scale(0.96);background:#2c2c2e;}
+.dynamic-island .di-icon{width:18px;height:18px;flex-shrink:0;fill:#24A1DE;}
+.dynamic-island .di-text{font-weight:700;font-size:0.82rem;color:#ffffff;letter-spacing:0.5px;white-space:nowrap;}
+
+.glass{background:var(–glass);backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);border:1px solid var(–glass-border);border-radius:22px;box-shadow:var(–shadow);}
+.header{width:min(500px,100%);padding:13px 18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;margin-top:8px;}
+.logo{font-family:‘Space Mono’,monospace;font-size:.88rem;font-weight:700;letter-spacing:2px;color:var(–blue);}
+.logo b{color:var(–text);}
+.toggle-row{display:flex;align-items:center;gap:8px;}
+.toggle-lbl{font-size:.62rem;font-weight:700;color:var(–muted);letter-spacing:1px;}
+.ios-sw{width:51px;height:29px;background:#3a3a3c;border-radius:15px;position:relative;cursor:pointer;transition:background .3s;}
+[data-theme=“light”] .ios-sw{background:#e5e5ea;}
+.ios-sw::after{content:’’;position:absolute;top:3px;left:3px;width:23px;height:23px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 6px rgba(0,0,0,.3);}
+[data-theme=“light”] .ios-sw::after{transform:translateX(22px);}
+
+.screen{width:min(500px,100%);display:none;}
+.screen.active{display:block;}
+.sec-label{font-size:.65rem;font-weight:700;color:var(–muted);letter-spacing:2px;text-transform:uppercase;margin:20px 0 10px 4px;}
+.lec-card{padding:16px 18px;margin-bottom:9px;display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s,transform .15s,box-shadow .2s;}
+.lec-card:active{transform:scale(0.98);}
+.lec-num{width:44px;height:44px;border-radius:11px;background:rgba(10,132,255,.12);border:1px solid rgba(10,132,255,.22);display:flex;align-items:center;justify-content:center;font-family:‘Space Mono’,monospace;font-size:.72rem;font-weight:700;color:var(–blue);flex-shrink:0;}
+.lec-body{flex:1;}
+.lec-name{font-size:.93rem;font-weight:700;margin-bottom:3px;}
+.lec-count{font-size:.72rem;color:var(–muted);}
+.lec-score{font-size:.72rem;font-weight:700;color:var(–green);margin-top:2px;}
+
+.progress-wrap{margin-bottom:14px;padding:14px 18px;}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prog-lec{font-size:.72rem;font-weight:700;color:var(–blue);letter-spacing:.5px;}
+.prog-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;background:var(–blue);border-radius:4px;transition:width .4s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.quiz-card{padding:22px 20px;margin-bottom:10px;}
+.q-num{font-size:.7rem;font-weight:700;color:var(–muted);margin-bottom:8px;text-align:center;}
+.q-text{font-size:1.02rem;font-weight:700;line-height:1.75;text-align:center;margin-bottom:18px;}
+.opt{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(–glass-border);cursor:pointer;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.opt:active{transform:scale(0.98);}
+.opt-badge{width:28px;height:28px;background:rgba(255,255,255,0.08);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:‘Space Mono’,monospace;font-size:.7rem;font-weight:700;color:var(–muted);flex-shrink:0;transition:all .2s;}
+.opt-text{font-size:.9rem;line-height:1.5;}
+.opt.correct{background:rgba(48,209,88,.12);border-color:rgba(48,209,88,.4);}
+.opt.correct .opt-badge{background:var(–green);color:#000;}
+.opt.wrong{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.4);}
+.opt.wrong .opt-badge{background:var(–red);color:#fff;}
+.opt.disabled{pointer-events:none;}
+.next-btn{width:100%;padding:15px;background:var(–blue);color:#fff;border:none;border-radius:14px;font-family:‘IBM Plex Sans Arabic’,sans-serif;font-weight:700;font-size:1rem;cursor:pointer;display:none;margin-top:6px;transition:opacity .2s;}
+.next-btn:active{opacity:0.8;}
+
+/* نتيجة المحاضرة */
+.result-card{padding:30px 22px;text-align:center;margin-bottom:12px;}
+.result-score{font-size:3.5rem;font-weight:800;color:var(–blue);font-family:‘Space Mono’,monospace;margin:10px 0;}
+.result-label{font-size:.85rem;color:var(–muted);margin-bottom:6px;}
+.result-msg{font-size:1rem;font-weight:700;margin:10px 0 20px;}
+.result-btns{display:flex;gap:10px;flex-direction:column;}
+.btn-review{width:100%;padding:14px;background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.3);color:var(–red);border-radius:14px;font-family:‘IBM Plex Sans Arabic’,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s;}
+.btn-review:active{opacity:0.8;}
+.btn-home{width:100%;padding:14px;background:rgba(10,132,255,.12);border:1px solid rgba(10,132,255,.3);color:var(–blue);border-radius:14px;font-family:‘IBM Plex Sans Arabic’,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s;}
+.btn-home:active{opacity:0.8;}
+
+/* شاشة إعادة الاختبار */
+.back-btn{width:100%;padding:14px;background:rgba(255,255,255,.06);border:1px solid var(–glass-border);color:var(–text);border-radius:14px;font-family:‘IBM Plex Sans Arabic’,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;margin-bottom:12px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.quiz-card,.lec-card,.result-card{animation:fadeUp .32s ease both;}
+</style>
+
+</head>
+<body data-theme="dark">
+
+<a href="https://t.me/XrayB1" target="_blank" class="dynamic-island">
+  <svg class="di-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+  <span class="di-text">AlBayati</span>
+</a>
+
+<div class="header glass">
+  <div class="logo">X<b>-RAY</b> <span style="color:var(--muted);font-size:.7rem;letter-spacing:1px;">PLATFORM</span></div>
+  <div class="toggle-row">
+    <span class="toggle-lbl">MODE</span>
+    <div class="ios-sw" onclick="toggleMode()"></div>
+  </div>
+</div>
+
+<!-- الشاشة الرئيسية -->
+
+<div id="screen-home" class="screen active">
+  <div class="sec-label">اللغة العربية العامة</div>
+  <div id="lectures-list"></div>
+</div>
+
+<!-- شاشة الاختبار -->
+
+<div id="screen-quiz" class="screen">
+  <div class="progress-wrap glass">
+    <div class="prog-top">
+      <span class="prog-lec" id="prog-lec-name"></span>
+      <span style="font-size:.72rem;color:var(--muted);" id="prog-count">0/25</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+  <div class="quiz-card glass">
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+    <div id="opts-wrap"></div>
+    <button id="next-btn" class="next-btn" onclick="nextQuestion()">السؤال التالي ←</button>
+  </div>
+</div>
+
+<!-- شاشة النتيجة -->
+
+<div id="screen-result" class="screen">
+  <div class="result-card glass">
+    <div class="result-label">نتيجتك في</div>
+    <div style="font-size:1.1rem;font-weight:800;margin-bottom:6px;" id="result-lec-name"></div>
+    <div class="result-score" id="result-score"></div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:16px;" id="result-detail"></div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-btns">
+      <button class="btn-review" id="btn-review" onclick="retryWrong()" style="display:none;">🔁 إعادة اختبار الأسئلة الخاطئة</button>
+      <button class="btn-home" onclick="goHome()">← العودة للمحاضرات</button>
+    </div>
+  </div>
+</div>
+
+<!-- شاشة إعادة اختبار الأسئلة الخاطئة -->
+
+<div id="screen-review" class="screen">
+  <div class="progress-wrap glass">
+    <div class="prog-top">
+      <span class="prog-lec" id="retry-lec-name">إعادة الأسئلة الخاطئة</span>
+      <span style="font-size:.72rem;color:var(--muted);" id="retry-count">0/0</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="retry-fill"></div></div>
+  </div>
+  <div class="quiz-card glass">
+    <div class="q-num" id="retry-q-num"></div>
+    <div class="q-text" id="retry-q-text"></div>
+    <div id="retry-opts-wrap"></div>
+    <button id="retry-next-btn" class="next-btn" onclick="retryNext()">السؤال التالي ←</button>
+  </div>
+</div>
+
+<!-- شاشة نتيجة إعادة الاختبار -->
+
+<div id="screen-retry-result" class="screen">
+  <div class="result-card glass">
+    <div class="result-label">نتيجة إعادة الاختبار</div>
+    <div style="font-size:1rem;font-weight:800;margin-bottom:6px;">الأسئلة الخاطئة</div>
+    <div class="result-score" id="retry-result-score"></div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:16px;" id="retry-result-detail"></div>
+    <div class="result-msg" id="retry-result-msg"></div>
+    <div class="result-btns">
+      <button class="btn-review" id="btn-retry-again" onclick="retryWrong()" style="display:none;">🔁 إعادة الخاطئة مجدداً</button>
+      <button class="btn-home" onclick="goHome()">← العودة للمحاضرات</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== بيانات الأسئلة =====================
+const LECTURES = [
+  {
+    id: 1,
+    name: "الخطاب الإداري واللغة",
+    desc: "الأهداف والسمات والأخطاء الشائعة",
+    questions: [
+      { q:"ما الهدف الأساسي من الخطاب الإداري؟", opts:["الترفيه","التعبير العاطفي","نقل المعلومات بدقة ووضوح","السرد القصصي"], ans:2 },
+      { q:"من أهم سمات اللغة الإدارية:", opts:["الغموض","الإيجاز والدقة","الإطالة","الخيال"], ans:1 },
+      { q:"يُفضل في الخطاب الإداري استخدام:", opts:["الأسلوب الأدبي","الأسلوب العلمي الواضح","الأسلوب القصصي","الأسلوب العاطفي"], ans:1 },
+      { q:"من الأخطاء الشائعة في اللغة:", opts:["الالتزام بالقواعد","استخدام الكلمات في غير معناها الصحيح","وضوح الجملة","ترتيب الأفكار"], ans:1 },
+      { q:"الأخطاء الإملائية تتعلق بـ:", opts:["ترتيب الأفكار","كتابة الكلمات بشكل صحيح","اختيار الموضوع","أسلوب العرض"], ans:1 },
+      { q:"التاء المربوطة تستخدم في:", opts:["الأفعال","الحروف","الأسماء غالبًا","جميع ما سبق"], ans:2 },
+      { q:"التاء المفتوحة تُنطق عند الوقف:", opts:["هاء","ألف","تاء","لا تُنطق"], ans:2 },
+      { q:"من علامات التاء المربوطة:", opts:["لا تحتوي على نقاط","تحتوي على نقطتين فوقها","تكتب كألف","لا تُكتب"], ans:1 },
+      { q:"الألف المقصورة تُكتب:", opts:["قائمة","على شكل ياء بدون نقاط","على شكل واو","مربوطة"], ans:1 },
+      { q:"الألف الممدودة تُكتب:", opts:["على شكل ياء","على شكل واو","قائمة","مربوطة"], ans:2 },
+      { q:"الحروف الشمسية تتميز بـ:", opts:["نطق اللام","حذف اللام لفظًا","حذف الحرف","نطق الحرفين"], ans:1 },
+      { q:"الحروف القمرية تتميز بـ:", opts:["عدم نطق اللام","نطق اللام","حذف الحرف","تشديد الحرف"], ans:1 },
+      { q:"أي من التالي صحيح؟", opts:["استناداً على","استنادًا إلى","استناداً في","استناداً عن"], ans:1 },
+      { q:"الصحيح لغويًا:", opts:["بناءً على","بناءً إلى","بناءً عن","بناءً في"], ans:0 },
+      { q:"الصحيح:", opts:["فضلاً على","فضلاً عن","فضلاً في","فضلاً إلى"], ans:1 },
+      { q:"أيهما أدق؟", opts:["تواجد الموظف","حضر الموظف","وجود الموظف","كان الموظف"], ans:1 },
+      { q:"الصحيح:", opts:["الإجابة على الاستفسار","الإجابة عن الاستفسار","الإجابة للاستفسار","الإجابة من الاستفسار"], ans:1 },
+      { q:"الصحيح:", opts:["كافة الطلاب","الطلاب كافة","كافة من الطلاب","كل الطلاب كافة"], ans:1 },
+      { q:"الصحيح:", opts:["غير المناسب","الغير مناسب","لا مناسب","ليس مناسب"], ans:0 },
+      { q:"الصحيح:", opts:["نفس الموضوع","الموضوع نفسه","ذات الموضوع","عين الموضوع"], ans:1 },
+      { q:"من خصائص النص الإداري:", opts:["التعقيد","الوضوح والبساطة","الغموض","الإطالة"], ans:1 },
+      { q:"يجب أن يكون الخطاب الإداري:", opts:["طويل","مختصر وواضح","أدبي","عاطفي"], ans:1 },
+      { q:"من الأخطاء الشائعة:", opts:["استخدام مبارك","استخدام مبروك (الصحيح: مبارك)","مبارك صحيحة فقط","كلاهما صائب"], ans:1 },
+      { q:"الصحيح:", opts:["دون قصد","بدون قصد","بلا قصد","ليس قصد"], ans:0 },
+      { q:"الصحيح:", opts:["أثر عليه","أثر فيه","أثر له","أثر به"], ans:1 },
+    ]
+  },
+  {
+    id: 2,
+    name: "الصياغة والتعبير الإداري",
+    desc: "دقة الصياغة واستخدام الأفعال والحروف",
+    questions: [
+      { q:"أيهما أدق؟", opts:["تم افتتاح المشروع","افتتح المشروع","كان افتتاح المشروع","قد تم افتتاح المشروع"], ans:1 },
+      { q:"الصحيح:", opts:["تأثير على","تأثير في","تأثير إلى","تأثير عن"], ans:1 },
+      { q:"الصحيح:", opts:["اعتذر للحضور","اعتذر عن الحضور","اعتذر عن عدم الحضور","اعتذر من الحضور"], ans:2 },
+      { q:"الصحيح:", opts:["مشروعات","مشاريع","مشروعين","مشروعون"], ans:0 },
+      { q:"الصحيح:", opts:["تصليح الأخطاء","تصحيح الأخطاء","تعديل الأخطاء","إصلاح الأخطاء"], ans:1 },
+      { q:"الصحيح:", opts:["الهيئة","الهيأه","الهئيه","الهياة"], ans:0 },
+      { q:"الصحيح:", opts:["حوالي 100","قرابة 100","مكان 100","فوق 100"], ans:1 },
+      { q:"الصحيح:", opts:["القانون الدولي (بضم الدال)","القانون الدولي (بفتح الدال)","القانون الدولي (كسر الدال)","لا شيء"], ans:0 },
+      { q:"من الأخطاء الشائعة: التأثير...", opts:["التأثير في","التأثير على (الصحيح: في)","التأثير من","كلها صحيحة"], ans:1 },
+      { q:"الصحيح:", opts:["بناء على","بناءً على","بناءُ على","بناءٍ على"], ans:1 },
+      { q:"الصحيح:", opts:["استناد على","استنادًا إلى","استناد في","استناد عن"], ans:1 },
+      { q:"الصحيح:", opts:["الغير رسمي","غير الرسمي","لا رسمي","ليس رسمي"], ans:1 },
+      { q:"الصحيح:", opts:["نفس القرار","القرار نفسه","ذات القرار","عين القرار"], ans:1 },
+      { q:"الخطاب الإداري يجب أن يخلو من:", opts:["الأفعال","العاطفة الزائدة","الأسماء","الحروف"], ans:1 },
+      { q:"الهدف من اللغة الإدارية:", opts:["الإبهار","الدقة والوضوح","الإطالة","التزيين"], ans:1 },
+      { q:"من خصائص الأسلوب الإداري:", opts:["الإطناب","الغموض","المباشرة والوضوح","الخيال"], ans:2 },
+      { q:"يجب تجنب في الكتابة الإدارية:", opts:["الدقة","التكرار الزائد","التنظيم","الترتيب"], ans:1 },
+      { q:"من عناصر الخطاب الإداري:", opts:["المقدمة","الموضوع","الخاتمة","جميع ما سبق"], ans:3 },
+      { q:"أي العبارات أدق:", opts:["تم إرسال الرسالة","أُرسلت الرسالة","كان إرسال الرسالة","قد تم إرسال الرسالة"], ans:1 },
+      { q:"الصحيح:", opts:["لفت انتباهي","لفت نظري","لفت سمعي","لفت إحساسي"], ans:1 },
+      { q:"الصحيح:", opts:["أرجو التكرم بالإفادة","أرجو الإفادة","الرجاء الإفادة","الرجاء التكرم"], ans:0 },
+      { q:"الصحيح:", opts:["يرجى الحضور","نرجو الحضور","نأمل الحضور","يرجى التكرم بالحضور"], ans:3 },
+      { q:"أي العبارات أدق إداريًا:", opts:["تم عمل الاجتماع","عُقد الاجتماع","حصل اجتماع","كان هناك اجتماع"], ans:1 },
+      { q:"الصحيح:", opts:["سوف يتم التنفيذ","سيتم التنفيذ","نُفِّذ","تم تنفيذ"], ans:2 },
+      { q:"أيهما أفضل:", opts:["قمنا بعمل دراسة","أجرينا دراسة","عملنا دراسة","صنعنا دراسة"], ans:1 },
+    ]
+  },
+  {
+    id: 3,
+    name: "الإملاء والكتابة الصحيحة",
+    desc: "الهمزات والكلمات الصحيحة إملائيًا",
+    questions: [
+      { q:"الصحيح:", opts:["إتخاذ القرار","اتخاذ القرار","إتخاد القرار","اتخاز القرار"], ans:1 },
+      { q:"الصحيح:", opts:["مسئول","مسؤول","مسؤل","مسؤولا"], ans:1 },
+      { q:"الصحيح:", opts:["شئ","شيء","شيئ","شي"], ans:1 },
+      { q:"الصحيح:", opts:["جزئ","جزء","جزأ","جزو"], ans:1 },
+      { q:"الصحيح:", opts:["بدء","بدأ","بداء","بدئ"], ans:1 },
+      { q:"الصحيح:", opts:["إملاء","إملاءً","إملائًا","املاء"], ans:0 },
+      { q:"الصحيح:", opts:["إلى الأمام","للأمام","إلى الأمام (صحيحة)","للأمام الصحيح"], ans:2 },
+      { q:"الصحيح:", opts:["على الرغم من","بالرغم من","على الرغم من (الأصح)","رغمًا من"], ans:2 },
+      { q:"الصحيح:", opts:["فيما عدا","ما عدا","باستثناء","جميع ما سبق صحيحة"], ans:3 },
+      { q:"الصحيح:", opts:["تم إبلاغه","أُبلغ","حصل إبلاغ","جرى إبلاغ"], ans:1 },
+      { q:"من الأخطاء الشائعة:", opts:["استخدام حيث أن في البداية","تجنبها في البداية","استخدامها دائمًا","لا فرق"], ans:1 },
+      { q:"الصحيح:", opts:["نظرًا لأن","حيث أن","نظرًا لأن (الأصح)","حيث"], ans:2 },
+      { q:"الصحيح:", opts:["تم البدء","بدأ العمل","حصل البدء","كان البدء"], ans:1 },
+      { q:"أيهما أدق:", opts:["عملنا تقرير","أعددنا تقريرًا","صنعنا تقرير","كتبنا تقرير"], ans:1 },
+      { q:"الصحيح:", opts:["موافق عليه","مُعتمد","مقبول","مرضي"], ans:1 },
+      { q:"الصحيح:", opts:["غير كافي","غير كافٍ","لا كافي","ليس كافي"], ans:0 },
+      { q:"الصحيح:", opts:["سيتم العمل","نعمل","جارٍ العمل","تم العمل"], ans:2 },
+      { q:"الصحيح:", opts:["في أقرب وقت ممكن","بأقرب وقت","في أقرب زمن","بأقرب فرصة فقط"], ans:0 },
+      { q:"الصحيح:", opts:["تم الموافقة","تمت الموافقة","حصل موافقة","كان موافقة"], ans:1 },
+      { q:"الصحيح:", opts:["الرجاء الرد","يرجى الرد","نأمل الرد","يرجى التكرم بالرد"], ans:3 },
+      { q:"الصحيح:", opts:["مع الشكر","وتفضلوا بقبول فائق الاحترام","شكرًا لكم","مع التحية فقط"], ans:1 },
+      { q:"الصحيح:", opts:["بناء عليه","بناءً عليه","بناءُ عليه","بناءٍ عليه"], ans:1 },
+      { q:"الصحيح:", opts:["طبقًا لذلك","بناءً على ذلك","على ذلك","لذلك فقط"], ans:1 },
+      { q:"الصحيح:", opts:["في بحال","في حالة","في حال","بحال"], ans:2 },
+      { q:"الصحيح:", opts:["كحد أقصى","حد أقصى","أقصى حد","حد فقط"], ans:0 },
+    ]
+  },
+  {
+    id: 4,
+    name: "المصطلحات والعبارات الإدارية",
+    desc: "الصياغة الدقيقة للمراسلات الرسمية",
+    questions: [
+      { q:"الصحيح:", opts:["على أساس","بناءً على","وفق أساس","حسب أساس"], ans:1 },
+      { q:"الصحيح:", opts:["تم التأكيد","أُكِّد","حصل تأكيد","كان التأكيد"], ans:1 },
+      { q:"الصحيح:", opts:["في ضوء ذلك","بضوء ذلك","على ضوء ذلك","كلاهما صحيح (أ+ج)"], ans:0 },
+      { q:"الصحيح:", opts:["إلى حد كبير","لحد كبير","إلى حد كبير جدًا","بحد كبير"], ans:0 },
+      { q:"الصحيح:", opts:["تم الإرسال","أُرسل","حصل إرسال","كان إرسال"], ans:1 },
+      { q:"الصحيح:", opts:["يرجى العلم بأن","نرجو العلم","الرجاء العلم","يجب العلم"], ans:0 },
+      { q:"الصحيح:", opts:["مع الأخذ بعين الاعتبار","مع الأخذ بالعين","مع الاعتبار","مع عين الاعتبار"], ans:0 },
+      { q:"الصحيح:", opts:["نود إفادتكم","نود إعلامكم","نفيدكم بأن","نعلمكم"], ans:2 },
+      { q:"الصحيح:", opts:["حسب ما ورد","وفقًا لما ورد","على ما ورد","من ما ورد"], ans:1 },
+      { q:"الصحيح:", opts:["تم الاطلاع","اطّلعنا","حصل اطلاع","كان اطلاع"], ans:1 },
+      { q:"الصحيح:", opts:["تم النظر","نُظر في الموضوع","حصل نظر","كان نظر"], ans:1 },
+      { q:"الصحيح:", opts:["يرجى التوضيح","نأمل التوضيح","يرجى التكرم بالتوضيح","التوضيح مطلوب"], ans:2 },
+      { q:"الصحيح:", opts:["تم التواصل","تم الاتصال","تم التواصل معه","تواصلنا معه"], ans:3 },
+      { q:"الصحيح:", opts:["بخصوص","بشأن","حول","عن"], ans:1 },
+      { q:"الصحيح:", opts:["نفيدكم علمًا","نفيدكم علمًا بأن","نخبركم علمًا","نعلمكم علمًا"], ans:1 },
+      { q:"الصحيح:", opts:["يرجى اتخاذ اللازم","اتخذ اللازم","يجب اتخاذ","تم اتخاذ"], ans:0 },
+      { q:"الصحيح:", opts:["تم التنفيذ","نُفِّذ","حصل تنفيذ","كان تنفيذ"], ans:1 },
+      { q:"الصحيح:", opts:["العمل جارٍ","العمل جاري","جار العمل","العمل يجري"], ans:0 },
+      { q:"الصحيح:", opts:["على الفور","فورًا فقط","في الفور","فور"], ans:0 },
+      { q:"الصحيح:", opts:["تم الانتهاء","انتهى العمل","حصل انتهاء","كان انتهاء"], ans:1 },
+      { q:"الصحيح:", opts:["وفق الخطة","وفقًا للخطة","حسب الخطة","على الخطة"], ans:1 },
+      { q:"الصحيح:", opts:["لا سيما","السيما","لا سي ما","لا سِي ما"], ans:0 },
+      { q:"الصحيح:", opts:["على سبيل المثال","كمثال","مثال","مثالاً"], ans:0 },
+      { q:"الصحيح:", opts:["تم التعديل","عُدِّل","حصل تعديل","كان تعديل"], ans:1 },
+      { q:"الصحيح:", opts:["تم التوضيح","وُضِّح الأمر","حصل توضيح","كان توضيح"], ans:1 },
+    ]
+  }
+];
+
+// ===================== حالة الاختبار =====================
+let currentLec = null;
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let wrongAnswers = [];
+let lecScores = {};
+
+// ===================== وظائف التنقل =====================
+function toggleMode() {
+  const body = document.body;
+  const current = body.getAttribute('data-theme');
+  body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome() {
+  currentLec = null;
+  renderHome();
+  showScreen('screen-home');
+}
+
+// ===================== الشاشة الرئيسية =====================
+function renderHome() {
+  const list = document.getElementById('lectures-list');
+  list.innerHTML = '';
+  LECTURES.forEach((lec, i) => {
+    const done = lecScores[lec.id];
+    const scoreText = done !== undefined
+      ? `<div class="lec-score">✓ أكملت: ${done}/${lec.questions.length}</div>` : '';
+    const card = document.createElement('div');
+    card.className = 'lec-card glass';
+    card.style.animationDelay = (i*0.07)+'s';
+    card.innerHTML = `
+      <div class="lec-num">L${lec.id}</div>
+      <div class="lec-body">
+        <div class="lec-name">${lec.name}</div>
+        <div class="lec-count">${lec.questions.length} سؤال • ${lec.desc}</div>
+        ${scoreText}
+      </div>
+      <span style="color:var(--muted);font-size:1.1rem;">›</span>
+    `;
+    card.onclick = () => startLecture(lec.id);
+    list.appendChild(card);
+  });
+}
+
+// ===================== بدء المحاضرة =====================
+function startLecture(lecId) {
+  currentLec = LECTURES.find(l => l.id === lecId);
+  currentQ = 0;
+  score = 0;
+  wrongAnswers = [];
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+// ===================== عرض السؤال =====================
+function renderQuestion() {
+  const lec = currentLec;
+  const q = lec.questions[currentQ];
+  const total = lec.questions.length;
+
+  document.getElementById('prog-lec-name').textContent = lec.name;
+  document.getElementById('prog-count').textContent = `${currentQ+1}/${total}`;
+  document.getElementById('prog-fill').style.width = ((currentQ+1)/total*100)+'%';
+  document.getElementById('q-num').textContent = `سؤال ${currentQ+1} من ${total}`;
+  document.getElementById('q-text').textContent = q.q;
+
+  const optsWrap = document.getElementById('opts-wrap');
+  optsWrap.innerHTML = '';
+  answered = false;
+  document.getElementById('next-btn').style.display = 'none';
+
+  const labels = ['أ','ب','ج','د'];
+  const correctAns = q.ans;
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'opt glass';
+    div.style.animationDelay = (i*0.06)+'s';
+    div.innerHTML = `<div class="opt-badge">${labels[i]}</div><span class="opt-text">${opt}</span>`;
+    const idx = i;
+    div.onclick = function() { selectAnswer(idx, this, correctAns); };
+    optsWrap.appendChild(div);
+  });
+}
+
+// ===================== اختيار الإجابة =====================
+function selectAnswer(chosen, el, correct) {
+  if (answered) return;
+  answered = true;
+
+  const opts = document.querySelectorAll('#opts-wrap .opt');
+  opts.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === correct) o.classList.add('correct');
+  });
+
+  if (chosen === correct) {
+    score++;
+    el.classList.add('correct');
+  } else {
+    el.classList.add('wrong');
+    opts[correct].classList.add('correct');
+    // حفظ الأسئلة الخاطئة
+    wrongAnswers.push({
+      q: currentLec.questions[currentQ],
+      chosen: chosen
+    });
+  }
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = currentQ + 1 < currentLec.questions.length ? 'السؤال التالي ←' : 'إنهاء الاختبار ✓';
+}
+
+// ===================== السؤال التالي =====================
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < currentLec.questions.length) {
+    renderQuestion();
+  } else {
+    showResultScreen();
+  }
+}
+
+// ===================== نتيجة الاختبار =====================
+function showResultScreen() {
+  const total = currentLec.questions.length;
+  const pct = Math.round(score / total * 100);
+  lecScores[currentLec.id] = score;
+
+  document.getElementById('result-lec-name').textContent = currentLec.name;
+  document.getElementById('result-score').textContent = `${score}/${total}`;
+  document.getElementById('result-detail').textContent = `${pct}% نسبة الإجابات الصحيحة`;
+
+  let msg = '', color = 'var(--green)';
+  if (pct >= 90) { msg = '🏆 ممتاز! أداء رائع جداً'; }
+  else if (pct >= 75) { msg = '✅ جيد جداً! استمر في التقدم'; }
+  else if (pct >= 60) { msg = '👍 جيد، يمكنك تحسين أدائك'; color = 'var(--blue)'; }
+  else { msg = '💪 تحتاج لمزيد من المراجعة'; color = 'var(--red)'; }
+
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-msg').style.color = color;
+
+  const reviewBtn = document.getElementById('btn-review');
+  if (wrongAnswers.length > 0) {
+    reviewBtn.style.display = 'block';
+    reviewBtn.textContent = `🔁 إعادة اختبار ${wrongAnswers.length} سؤال خاطئ`;
+  } else {
+    reviewBtn.style.display = 'none';
+  }
+
+  showScreen('screen-result');
+}
+
+// ===================== إعادة اختبار الأسئلة الخاطئة =====================
+let retryQuestions = [];
+let retryQ = 0;
+let retryScore = 0;
+let retryAnswered = false;
+let retryWrongAgain = [];
+
+function retryWrong() {
+  retryQuestions = wrongAnswers.map(w => w.q);
+  retryQ = 0;
+  retryScore = 0;
+  retryAnswered = false;
+  retryWrongAgain = [];
+  showScreen('screen-review');
+  renderRetryQuestion();
+}
+
+function renderRetryQuestion() {
+  const q = retryQuestions[retryQ];
+  const total = retryQuestions.length;
+
+  document.getElementById('retry-lec-name').textContent = '🔁 إعادة الأسئلة الخاطئة';
+  document.getElementById('retry-count').textContent = `${retryQ+1}/${total}`;
+  document.getElementById('retry-fill').style.width = ((retryQ+1)/total*100)+'%';
+  document.getElementById('retry-q-num').textContent = `سؤال ${retryQ+1} من ${total}`;
+  document.getElementById('retry-q-text').textContent = q.q;
+
+  const wrap = document.getElementById('retry-opts-wrap');
+  wrap.innerHTML = '';
+  retryAnswered = false;
+  document.getElementById('retry-next-btn').style.display = 'none';
+
+  const labels = ['أ','ب','ج','د'];
+  const correctAns = q.ans;
+  const currentQ_obj = q;
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'opt glass';
+    div.style.animationDelay = (i*0.06)+'s';
+    div.innerHTML = `<div class="opt-badge">${labels[i]}</div><span class="opt-text">${opt}</span>`;
+    const idx = i;
+    div.onclick = function() { selectRetryAnswer(idx, this, correctAns, currentQ_obj); };
+    wrap.appendChild(div);
+  });
+}
+
+function selectRetryAnswer(chosen, el, correct, q) {
+  if (retryAnswered) return;
+  retryAnswered = true;
+
+  const opts = document.querySelectorAll('#retry-opts-wrap .opt');
+  opts.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === correct) o.classList.add('correct');
+  });
+
+  if (chosen === correct) {
+    retryScore++;
+    el.classList.add('correct');
+  } else {
+    el.classList.add('wrong');
+    opts[correct].classList.add('correct');
+    retryWrongAgain.push({ q, chosen });
+  }
+
+  const btn = document.getElementById('retry-next-btn');
+  btn.style.display = 'block';
+  btn.textContent = retryQ + 1 < retryQuestions.length ? 'السؤال التالي ←' : 'إنهاء ✓';
+}
+
+function retryNext() {
+  retryQ++;
+  if (retryQ < retryQuestions.length) {
+    renderRetryQuestion();
+  } else {
+    showRetryResult();
+  }
+}
+
+function showRetryResult() {
+  const total = retryQuestions.length;
+  const pct = Math.round(retryScore / total * 100);
+
+  document.getElementById('retry-result-score').textContent = `${retryScore}/${total}`;
+  document.getElementById('retry-result-detail').textContent = `${pct}% نسبة الإجابات الصحيحة`;
+
+  let msg = '', color = 'var(--green)';
+  if (pct >= 90) { msg = '🏆 ممتاز! تحسّن رائع!'; }
+  else if (pct >= 75) { msg = '✅ جيد جداً! استمر في التقدم'; }
+  else if (pct >= 60) { msg = '👍 جيد، تحسّنت!'; color = 'var(--blue)'; }
+  else { msg = '💪 راجع هذه الأسئلة مجدداً'; color = 'var(--red)'; }
+
+  document.getElementById('retry-result-msg').textContent = msg;
+  document.getElementById('retry-result-msg').style.color = color;
+
+  const againBtn = document.getElementById('btn-retry-again');
+  if (retryWrongAgain.length > 0) {
+    // نحدّث wrongAnswers بالأسئلة الخاطئة الجديدة فقط
+    wrongAnswers = retryWrongAgain;
+    againBtn.style.display = 'block';
+    againBtn.textContent = `🔁 إعادة ${retryWrongAgain.length} سؤال خاطئ مجدداً`;
+  } else {
+    againBtn.style.display = 'none';
+  }
+
+  showScreen('screen-retry-result');
+}
+
+// ===================== تهيئة =====================
+renderHome();
+</script>
+
+</body>
+</html>
